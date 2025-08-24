@@ -25,38 +25,17 @@ public class CubeClickHandler : MonoBehaviour
                 float averageScale = (cubeScale.x + cubeScale.y + cubeScale.z) / 3f;
 
                 cube.ChangeColor();
-                bool didSplit = cube.Split();
+                bool canSplit = cube.Split();
 
-                if (!didSplit)
+                if (!canSplit)
                 {
-                    ApplyExplosionForce(hit.point, _explosionForce, 5f, averageScale);
+                    var explosionHandler = cube.GetComponent<ExplosionHandler>();
+                    if (explosionHandler != null)
+                    {
+                        explosionHandler.ApplyExplosionForce(hit.point, _explosionForce, 5f, averageScale);
+                    }
                 }
             }
         }
     }
-
-    private void ApplyExplosionForce(Vector3 explosionPosition, float baseForce, float baseRadius, float cubeScale)
-    {
-        float explosionRadius = baseRadius / cubeScale;
-        float explosionForce = baseForce / cubeScale;
-
-        Rigidbody[] rigidbodies = FindObjectsOfType<Rigidbody>();
-
-        foreach (var rigidbody in rigidbodies)
-        {
-            if (rigidbody == null || rigidbody.gameObject == this.gameObject) continue;
-
-            float distance = Vector3.Distance(rigidbody.position, explosionPosition);
-
-            if (distance <= explosionRadius)
-            {
-                float distanceFactor = 1f - (distance / explosionRadius);
-                Vector3 direction = (rigidbody.position - explosionPosition).normalized;
-                float force = explosionForce * distanceFactor;
-
-                rigidbody.AddForce(direction * force, ForceMode.Impulse);
-            }
-        }
-    }
-
 }
