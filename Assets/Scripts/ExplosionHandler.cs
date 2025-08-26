@@ -1,17 +1,24 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 
 public class ExplosionHandler : MonoBehaviour
 {
-    public void ApplyExplosion(Vector3 explosionPosition, float force = 10f)
-    {
-        Rigidbody rigidbody = GetComponent<Rigidbody>();
+    [SerializeField] private float _explosionRadius;
 
-        if (rigidbody != null)
+    public void ApplyExplosion(List<Cube> cubes, Vector3 explosionPosition, float force)
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, _explosionRadius);
+
+        foreach (Collider hit in hits)
         {
-            Vector3 explosionDir = (transform.position - explosionPosition).normalized;
-            rigidbody.AddForce(explosionDir * force, ForceMode.Impulse);
+            if(hit.transform.TryGetComponent(out Cube cube))
+            {
+                Vector3 explosionDirection = (hit.transform.position - explosionPosition).normalized;
+                Rigidbody rigidbody = hit.GetComponent<Rigidbody>();
+                rigidbody.AddForce(explosionDirection * force, ForceMode.Impulse);
+            }
         }
     }
 
@@ -26,7 +33,6 @@ public class ExplosionHandler : MonoBehaviour
         {
             if (rigidbody == null || rigidbody.gameObject == this.gameObject) continue;
 
-            //float distance = Vector3.Distance(rigidbody.position, explosionPosition);
             float distance = (rigidbody.position - explosionPosition).sqrMagnitude;
 
             if (distance <= explosionRadius)

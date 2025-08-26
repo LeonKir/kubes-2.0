@@ -1,9 +1,17 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CubeClickHandler : MonoBehaviour
 {
     [SerializeField] private CubeSpawner _spawner;
-    [SerializeField] private float _explosionForce = 10f;
+    [SerializeField] private float _explosionForce = 2f;
+
+    private ExplosionHandler _explosionHandler;
+
+    private void Awake()
+    {
+        _explosionHandler = FindObjectOfType<ExplosionHandler>();
+    }
 
     private void Update()
     {
@@ -24,18 +32,39 @@ public class CubeClickHandler : MonoBehaviour
                 Vector3 cubeScale = cube.transform.localScale;
                 float averageScale = (cubeScale.x + cubeScale.y + cubeScale.z) / 3f;
 
-                cube.ChangeColor();
-                bool canSplit = cube.Split();
-
-                if (!canSplit)
+                if (CanSplit(cube))
                 {
-                    var explosionHandler = cube.GetComponent<ExplosionHandler>();
-                    if (explosionHandler != null)
+                    List<Cube> newCubes = _spawner.RequestSplit(cube);
+
+                    _explosionHandler.ApplyExplosion(newCubes, cube.transform.position, averageScale);
+                }
+                else
+                {
+                    if (_explosionHandler != null)
                     {
-                        explosionHandler.ApplyExplosionForce(hit.point, _explosionForce, 5f, averageScale);
+                        _explosionHandler.ApplyExplosionForce(
+                            cube.transform.position,
+                            _explosionForce,
+                            5f,
+                            averageScale
+                        );
                     }
                 }
+
+                Destroy(cube.gameObject);
             }
         }
+    }
+
+    private bool CanSplit(Cube cube)
+    {
+        bool didSplit = false;
+
+        if (Random.value <= cube.GetSplitChance())
+        {
+            didSplit = true;
+        }
+
+        return didSplit;
     }
 }

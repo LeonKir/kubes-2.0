@@ -11,11 +11,15 @@ public class ColorChanger : MonoBehaviour
         _renderer = GetComponent<Renderer>();
     }
 
-    public void ChangeColor()
+    public Color ChangeColor()
     {
         if (_renderer != null)
         {
-            _renderer.material.color = Random.ColorHSV();
+            Color newColor = Random.ColorHSV();
+            _renderer.material.color = newColor;
+            return newColor;
         }
+
+        return Color.white;
     }
 }
