@@ -15,7 +15,7 @@ public class CubeHandler : MonoBehaviour
         if (CanSplit(cube))
         {
             List<Cube> newCubes = _spawner.RequestSplit(cube);
-            _explosionHandler.ApplyExplosion(newCubes, cube.transform.position, averageScale);
+            _explosionHandler.ApplyExplosionToCubes(newCubes, cube.transform.position, averageScale);
         }
         else
         {

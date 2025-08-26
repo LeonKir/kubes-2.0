@@ -38,7 +38,7 @@ public class CubeSpawner : MonoBehaviour
         Vector3 newPosition = position + Random.insideUnitSphere * cubeOffset;
         Cube cube = Instantiate(_cubePrefab, newPosition, Random.rotation);
         cube.transform.localScale = scale;
-        cube.SplitChance = splitChance;
+        cube.SetSplitChance(splitChance);
         cube.GetComponent<ColorChanger>()?.ChangeColor();
 
         return cube;

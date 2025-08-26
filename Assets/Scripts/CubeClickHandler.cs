@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CubeClickHandler : MonoBehaviour
 {
-    [SerializeField] private InputReader _inputReader;
+    [SerializeField] private MouseButtonRegistration _inputReader;
     [SerializeField] private RaycastHandler _raycastHandler;
     [SerializeField] private CubeHandler _cubeHandler;
 

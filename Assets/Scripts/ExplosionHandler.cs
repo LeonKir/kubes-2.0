@@ -7,21 +7,6 @@ public class ExplosionHandler : MonoBehaviour
 {
     [SerializeField] private float _explosionRadius;
 
-    public void ApplyExplosion(List<Cube> cubes, Vector3 explosionPosition, float force)
-    {
-        Collider[] hits = Physics.OverlapSphere(transform.position, _explosionRadius);
-
-        foreach (Collider hit in hits)
-        {
-            if(hit.transform.TryGetComponent(out Cube cube))
-            {
-                Vector3 explosionDirection = (hit.transform.position - explosionPosition).normalized;
-                Rigidbody rigidbody = hit.GetComponent<Rigidbody>();
-                rigidbody.AddForce(explosionDirection * force, ForceMode.Impulse);
-            }
-        }
-    }
-
     public void ApplyExplosionForce(Vector3 explosionPosition, float baseForce, float baseRadius, float cubeScale)
     {
         float explosionRadius = baseRadius / cubeScale;
@@ -42,6 +27,18 @@ public class ExplosionHandler : MonoBehaviour
                 float force = explosionForce * distanceFactor;
 
                 rigidbody.AddForce(direction * force, ForceMode.Impulse);
+            }
+        }
+    }
+
+    public void ApplyExplosionToCubes(List<Cube> cubes, Vector3 explosionPosition, float force)
+    {
+        foreach (Cube cube in cubes)
+        {
+            if (cube != null && cube.TryGetComponent(out Rigidbody rb))
+            {
+                Vector3 explosionDirection = (cube.transform.position - explosionPosition).normalized;
+                rb.AddForce(explosionDirection * force, ForceMode.Impulse);
             }
         }
     }

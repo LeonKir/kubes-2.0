@@ -7,6 +7,11 @@ public class Cube : MonoBehaviour
     public float SplitChance
     {
         get => _splitChance;
-        set => _splitChance = value;
+        private set => _splitChance = value;
+    }
+
+    public void SetSplitChance(float chance)
+    {
+        SplitChance = chance;
     }
 }
