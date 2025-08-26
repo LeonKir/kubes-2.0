@@ -5,19 +5,6 @@ public class CubeSpawner : MonoBehaviour
 {
     [SerializeField] private Cube _cubePrefab;
 
-    private Cube SpawnCube(Vector3 position, Vector3 scale, float splitChance)
-    {
-        float cubeOffset = 0.5f;
-
-        Vector3 newPosition = position + Random.insideUnitSphere * cubeOffset;
-        Cube Cube = Instantiate(_cubePrefab, newPosition, Random.rotation);
-        Cube.transform.localScale = scale;
-        Cube.SetSplitChance(splitChance);
-        Cube.GetComponent<ColorChanger>()?.ChangeColor();
-
-        return Cube;
-    }
-
     public List<Cube> RequestSplit(Cube originalCube)
     {
         List<Cube> spawnedCubes = new List<Cube>();
@@ -30,7 +17,7 @@ public class CubeSpawner : MonoBehaviour
 
         for (int i = 0; i < newCubesCount; i++)
         {
-            float newSplitChance = originalCube.GetSplitChance() * decreaseChance;
+            float newSplitChance = originalCube.SplitChance * decreaseChance;
             Debug.Log(newSplitChance);
 
             Cube newCube = SpawnCube(
@@ -42,5 +29,18 @@ public class CubeSpawner : MonoBehaviour
         }
 
         return spawnedCubes;
+    }
+
+    private Cube SpawnCube(Vector3 position, Vector3 scale, float splitChance)
+    {
+        float cubeOffset = 0.5f;
+
+        Vector3 newPosition = position + Random.insideUnitSphere * cubeOffset;
+        Cube cube = Instantiate(_cubePrefab, newPosition, Random.rotation);
+        cube.transform.localScale = scale;
+        cube.SplitChance = splitChance;
+        cube.GetComponent<ColorChanger>()?.ChangeColor();
+
+        return cube;
     }
 }

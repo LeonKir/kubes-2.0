@@ -2,15 +2,11 @@ using UnityEngine;
 
 public class Cube : MonoBehaviour
 {
-    private float _splitChance = 1.0f;
+    [SerializeField] private float _splitChance = 1.0f;
 
-    public void SetSplitChance(float chance)
+    public float SplitChance
     {
-        _splitChance = chance;
-    }
-
-    public float GetSplitChance()
-    {
-        return _splitChance;
+        get => _splitChance;
+        set => _splitChance = value;
     }
 }
