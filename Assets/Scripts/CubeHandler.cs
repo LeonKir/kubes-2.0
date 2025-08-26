@@ -7,6 +7,8 @@ public class CubeHandler : MonoBehaviour
     [SerializeField] private float _explosionForce = 2f;
     [SerializeField] private ExplosionHandler _explosionHandler;
 
+    private List<Cube> _allCubes = new List<Cube>();
+
     public void HandleCube(Cube cube)
     {
         Vector3 cubeScale = cube.transform.localScale;
@@ -16,6 +18,8 @@ public class CubeHandler : MonoBehaviour
         {
             List<Cube> newCubes = _spawner.RequestSplit(cube);
             _explosionHandler.ApplyExplosionToCubes(newCubes, cube.transform.position, averageScale);
+
+            _allCubes.AddRange(newCubes);
         }
         else
         {
@@ -25,7 +29,8 @@ public class CubeHandler : MonoBehaviour
                     cube.transform.position,
                     _explosionForce,
                     5f,
-                    averageScale
+                    averageScale,
+                    _allCubes
                 );
             }
         }

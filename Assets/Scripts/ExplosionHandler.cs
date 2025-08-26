@@ -7,15 +7,15 @@ public class ExplosionHandler : MonoBehaviour
 {
     [SerializeField] private float _explosionRadius;
 
-    public void ApplyExplosionForce(Vector3 explosionPosition, float baseForce, float baseRadius, float cubeScale)
+    public void ApplyExplosionForce(Vector3 explosionPosition, float baseForce, float baseRadius, float cubeScale, List<Cube> allCubes)
     {
         float explosionRadius = baseRadius / cubeScale;
         float explosionForce = baseForce / cubeScale;
 
-        Rigidbody[] rigidbodies = FindObjectsOfType<Rigidbody>();
-
-        foreach (var rigidbody in rigidbodies)
+        foreach (var cube in allCubes)
         {
+            Rigidbody rigidbody = cube.GetComponent<Rigidbody>();
+
             if (rigidbody == null || rigidbody.gameObject == this.gameObject) continue;
 
             float distance = (rigidbody.position - explosionPosition).sqrMagnitude;

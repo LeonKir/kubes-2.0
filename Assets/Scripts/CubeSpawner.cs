@@ -7,7 +7,7 @@ public class CubeSpawner : MonoBehaviour
 
     public List<Cube> RequestSplit(Cube originalCube)
     {
-        List<Cube> spawnedCubes = new List<Cube>();
+        List<Cube> newSpawnedCubes = new List<Cube>();
 
         int minCountCubes = 2;
         int maxCountCubes = 7;
@@ -25,10 +25,10 @@ public class CubeSpawner : MonoBehaviour
                 originalCube.transform.localScale * bias,
                 newSplitChance);
 
-            spawnedCubes.Add(newCube);
+            newSpawnedCubes.Add(newCube);
         }
 
-        return spawnedCubes;
+        return newSpawnedCubes;
     }
 
     private Cube SpawnCube(Vector3 position, Vector3 scale, float splitChance)
